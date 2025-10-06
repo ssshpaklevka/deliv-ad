@@ -1,7 +1,7 @@
 // api/apiClient.ts
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-const API_BASE_URL = "http://localhost:3001/api/delivery"; // ваш сервер
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 // Функция для генерации deviceId
 const getDeviceId = (): string => {
@@ -36,7 +36,7 @@ apiClient.interceptors.request.use(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (error: any) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // Интерцептор для обработки ответов и обновления токена
@@ -82,7 +82,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default apiClient;
