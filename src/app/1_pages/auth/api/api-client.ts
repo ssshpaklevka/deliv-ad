@@ -1,4 +1,5 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { nanoid } from "nanoid"; // ← Добавьте этот импорт
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -6,7 +7,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 const getDeviceId = (): string => {
   let deviceId = localStorage.getItem("deviceId");
   if (!deviceId) {
-    deviceId = crypto.randomUUID();
+    deviceId = nanoid(); // ← Замените эту строку
     localStorage.setItem("deviceId", deviceId);
   }
   return deviceId;
