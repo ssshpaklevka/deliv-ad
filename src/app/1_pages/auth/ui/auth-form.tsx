@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import React, { useState } from "react";
 import { useAuth } from "../context/auth-context";
 
 const AuthForm = () => {
@@ -80,16 +80,45 @@ const AuthForm = () => {
 
   const handleVerifySms = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("=== VERIFY SMS START ===");
+    console.log("Phone:", phoneNumber);
+    console.log("SMS Code:", smsCode);
+    console.log("SMS Code length:", smsCode.length);
+
     setLoading(true);
     setError("");
 
     try {
+      console.log("🚀 Calling login function...");
       await login(phoneNumber, smsCode);
+      console.log("✅ Login successful!");
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      setError(error.response?.data?.message || "Неверный код");
+      console.error("❌ Login error:", error);
+      console.log("Error type:", typeof error);
+      console.log("Error response:", error.response);
+      console.log("Error message:", error.message);
+      console.log("Full error object:", JSON.stringify(error, null, 2));
+
+      // Более детальная обработка ошибок
+      if (error.response) {
+        // Запрос ушёл, получен ответ с ошибкой
+        console.log("📡 Response status:", error.response.status);
+        console.log("📡 Response data:", error.response.data);
+        setError(error.response.data?.message || "Неверный код");
+      } else if (error.request) {
+        // Запрос ушёл, но ответа нет
+        console.log("📡 Request was made but no response:", error.request);
+        setError("Нет ответа от сервера");
+      } else {
+        // Ошибка до отправки запроса
+        console.log("⚠️ Error before request:", error.message);
+        setError(error.message || "Ошибка отправки запроса");
+      }
     } finally {
       setLoading(false);
+      console.log("=== VERIFY SMS END ===");
     }
   };
 
